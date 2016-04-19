@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" stylesheets="@FFSkins.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FFController">
+   <children>
+      <MenuBar prefHeight="30.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="Exit" mnemonicParsing="false" onAction="#ExitOnAction" text="Exit" />
+            </items>
+          </Menu>
+            <Menu fx:id="HitCriteria" mnemonicParsing="false" text="Hit Criteria">
+               <items>
+                  <Menu mnemonicParsing="false" text="Midpoint Criteria">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Midpoint Cutoff">
+                           <graphic>
+                              <TextField fx:id="MidPointValue" promptText="Midpoint Cutoff Criteria" text="0.5" />
+                           </graphic>
+                        </MenuItem>
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Adjusted R Squared Criteria">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Adjusted R Squared Cutoff">
+                           <graphic>
+                              <TextField fx:id="AdjustedRSquaredValue" promptText="Adjusted R Squared Cutoff" text="0.7" />
+                           </graphic>
+                        </MenuItem>
+                     </items>
+                  </Menu>
+                  <Menu fx:id="DifferenceCriteria" mnemonicParsing="false" text="Difference Criteria">
+                    <items>
+                        <MenuItem fx:id="PeptideLowerBound" mnemonicParsing="false" text="Lower Bound %ile">
+                           <graphic>
+                              <TextField fx:id="DifferenceValueLower" promptText="Difference Lower Bound" text="" />
+                           </graphic>
+                        </MenuItem>
+                      <MenuItem fx:id="PeptideUpperBound" mnemonicParsing="false" text="Upper Bound %ile">
+                           <graphic>
+                              <TextField fx:id="DifferenceValueUpper" promptText="Difference Upper Bound" text="" />
+                           </graphic>
+                        </MenuItem>
+                    </items>
+                  </Menu>
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <Group id="SPROXGroup" fx:id="SPROXGroup" layoutX="-5.0" layoutY="-5.0">
+         <children>
+            <Button fx:id="SPROXBrowse" layoutX="517.0" layoutY="38.0" mnemonicParsing="false" onAction="#SPROXButtonOnAction" prefHeight="26.0" prefWidth="80.0" text="Browse" />
+            <Label fx:id="SPROXLabel" layoutX="14.0" layoutY="43.0" prefHeight="16.0" prefWidth="97.0" text="SPROX csv" />
+            <TextField fx:id="SPROXField" layoutX="111.0" layoutY="39.0" onDragEntered="#SPROXOnDragEntered" onDragExited="#SPROXOnDragExited" prefHeight="26.0" prefWidth="395.0" promptText="Drag or browse your SPROX File" styleClass="textfield" stylesheets="@FFSkins.css" />
+         </children>
+      </Group>
+      <Group id="DenaturantGroup" layoutX="-5.0" stylesheets="@FFSkins.css">
+         <children>
+            <TextField fx:id="DenaturantField" layoutX="111.0" layoutY="64.0" onDragEntered="#DenaturantOnDragEntered" onDragExited="#DenaturantOnDragExited" prefHeight="26.0" prefWidth="395.0" promptText="Drag or browse your Denaturant File" styleClass="textfield" />
+            <Label layoutX="14.0" layoutY="69.0" prefHeight="16.0" prefWidth="97.0" text="Denaturant File" />
+            <Button fx:id="DenaturantBrowse" layoutX="517.0" layoutY="64.0" mnemonicParsing="false" onAction="#DenaturantButtonOnAction" prefHeight="26.0" prefWidth="80.0" text="Browse" />
+         </children>
+      </Group>
+      <ScrollPane id="FFInfoContainer" fx:id="FFInfoContainer" layoutX="3.0" layoutY="203.0" prefHeight="253.0" prefWidth="594.0">
+         <content>
+            <TextFlow id="FFInfo" fx:id="FFInfo" prefHeight="253.0" prefWidth="593.0" />
+         </content>
+      </ScrollPane>
+      <ProgressBar id="progressBar" fx:id="progressBar" layoutX="1.0" layoutY="456.0" prefHeight="20.0" prefWidth="594.0" progress="0.0" />
+      <VBox layoutX="9.0" layoutY="98.0">
+         <children>
+            <Label text="Model Options" />
+            <ToolBar layoutX="3.0" layoutY="96.0" prefHeight="30.0" prefWidth="497.0">
+               <items>
+                  <CheckBox id="Dual" fx:id="dualExperiment" layoutX="160.0" layoutY="100.0" mnemonicParsing="false" />
+                  <CheckBox id="GenerateGraphs" fx:id="Graphs" layoutX="330.0" layoutY="100.0" mnemonicParsing="false" />
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
+      <Button id="button-default" fx:id="AnalyzeButton" defaultButton="true" layoutX="512.0" layoutY="131.0" mnemonicParsing="false" onAction="#AnalyzeOnAction" prefHeight="27.0" prefWidth="80.0" styleClass="Button-Default" text="Analyze" />
+      <VBox layoutX="9.0" layoutY="156.0">
+         <children>
+            <Label layoutX="9.0" layoutY="150.0" text="Peptide Options" />
+            <ToolBar layoutX="14.0" layoutY="165.0">
+               <items>
+                  <CheckBox fx:id="detectOxCheckBox" mnemonicParsing="false" />
+                  <CheckBox fx:id="runPeptideAnalysis" layoutX="14.0" layoutY="165.0" mnemonicParsing="false" />
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
