@@ -85,20 +85,16 @@ public class FFController implements Initializable {
 	 * initial values displayed on check boxes
 	 */
 
-	private final String detectOxInitialMessage = "Not Detecting Ox Met";
-	private final String detectOxChangedMessage = "Detecting Ox Met";
+	private final String detectOxInitialMessage = "Detect Ox Met?";
 	private final boolean detectOxInitialCondition = false;
 
-	private final String dualExperimentInitialMessage = "-/+ Ligand Experiment";
-	private final String dualExperimentChangedMessage = "Single Experiment";
+	private final String dualExperimentInitialMessage = "-/+ Ligand Experiment?";
 	private final boolean dualExperimentInitialCondition = true;
 
-	private final String generateGraphsInitialMessage = "Not Generating Graphs";
-	private final String generateGraphsChangedMessage = "Generating Graphs";
+	private final String generateGraphsInitialMessage = "Generate Graphs?";
 	private final boolean generateGraphsInitialCondition = false;
 
-	private final String runPeptideAnalysisInitialMessage = "Running Difference Analysis";
-	private final String runPeptideAnalysisChangedMessage = "Not Running Difference Analysis";
+	private final String runPeptideAnalysisInitialMessage = "Run Difference Analysis?";
 	private final boolean runPeptideAnalysisInitialCondition = true;
 
 	@Override
@@ -113,54 +109,32 @@ public class FFController implements Initializable {
 		/*
 		 * Setup graphs
 		 */
-		FFCheckBoxChangeListener graphsListener = new FFCheckBoxChangeListener(
-				generateGraphsInitialMessage, generateGraphsChangedMessage,
-				generateGraphsInitialCondition);
 
 		Graphs.setAllowIndeterminate(false);
 		Graphs.setSelected(generateGraphsInitialCondition);
-		Graphs.selectedProperty().addListener(graphsListener);
-		Graphs.textProperty().bind(graphsListener.getStringProperty());
+		Graphs.textProperty().set(generateGraphsInitialMessage);
 
 		/*
 		 * Set indeterminate on detectOxCheckBox to false Bind changes in
 		 * detectOxCheckBox to detectOx
 		 */
-		FFCheckBoxChangeListener detectOxChangeListener = new FFCheckBoxChangeListener(
-				detectOxInitialMessage, detectOxChangedMessage,
-				detectOxInitialCondition);
-
 		detectOxCheckBox.setAllowIndeterminate(false);
 		detectOxCheckBox.setSelected(detectOxInitialCondition);
-		detectOxCheckBox.selectedProperty().addListener(detectOxChangeListener);
-		detectOxCheckBox.textProperty().bind(
-				detectOxChangeListener.getStringProperty());
+		detectOxCheckBox.textProperty().set(detectOxInitialMessage);
 
 		/*
 		 * setup dual experiment check box
 		 */
-		FFCheckBoxChangeListener dualExperimentChangeListener = new FFCheckBoxChangeListener(
-				dualExperimentInitialMessage, dualExperimentChangedMessage,
-				dualExperimentInitialCondition);
-
 		dualExperiment.setAllowIndeterminate(false);
 		dualExperiment.setSelected(dualExperimentInitialCondition);
-		dualExperiment.selectedProperty().addListener(
-				dualExperimentChangeListener);
-		dualExperiment.textProperty().bind(
-				dualExperimentChangeListener.getStringProperty());
+		dualExperiment.textProperty().set(dualExperimentInitialMessage);
 
 		/*
 		 * set up peptide difference analysis check box
 		 */
-		FFCheckBoxChangeListener runPeptideAnalysisChangeListener = new FFCheckBoxChangeListener(
-				runPeptideAnalysisInitialMessage,
-				runPeptideAnalysisChangedMessage,
-				runPeptideAnalysisInitialCondition);
 		runPeptideAnalysis.setAllowIndeterminate(false);
 		runPeptideAnalysis.setSelected(runPeptideAnalysisInitialCondition);
-		runPeptideAnalysis.selectedProperty().addListener(runPeptideAnalysisChangeListener);
-		runPeptideAnalysis.textProperty().bind(runPeptideAnalysisChangeListener.getStringProperty());
+		runPeptideAnalysis.textProperty().set(runPeptideAnalysisInitialMessage);
 		
 		/*
 		 * add listeners to the peptide analysis text fields
@@ -453,58 +427,5 @@ public class FFController implements Initializable {
 				tf.setText(oldValue);
 			}
 		}
-	}
-
-	private class FFCheckBoxChangeListener implements ChangeListener<Boolean> {
-		// initialValue - final
-		private final boolean initialValue;
-		// default message
-		private final String defaultMessage;
-		// message displayed when changed
-		private final String changedMessage;
-
-		// text property to update
-		private StringProperty textProperty;
-
-		/**
-		 * 
-		 * @param defaultMessage
-		 *            initial displayed message
-		 * @param changedMessage
-		 *            message displayed when changed
-		 * @param initialValue
-		 *            initial value of the check box
-		 * @param checkBox
-		 *            checkbox object to change
-		 */
-		public FFCheckBoxChangeListener(String defaultMessage,
-				String changedMessage, boolean initialValue) {
-			// sole constructor
-			this.initialValue = initialValue;
-			this.defaultMessage = defaultMessage;
-			this.changedMessage = changedMessage;
-
-			this.textProperty = new SimpleStringProperty(defaultMessage);
-		}
-
-		@Override
-		public void changed(ObservableValue<? extends Boolean> observable,
-				Boolean oldValue, Boolean newValue) {
-			// changed
-			if (initialValue != newValue) {
-				textProperty.set(changedMessage);
-			}
-
-			// initialValue == newVal
-			// state returns to default
-			else {
-				textProperty.set(defaultMessage);
-			}
-		}
-
-		public StringProperty getStringProperty() {
-			return textProperty;
-		}
-
 	}
 }
