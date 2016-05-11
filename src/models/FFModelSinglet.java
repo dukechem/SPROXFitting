@@ -14,85 +14,87 @@ import statics.FFConstants;
 import statics.TextFlowWriter;
 import HTML.HTMLGenerator;
 import containers.Chartable;
-import containers.FFError;
 import containers.GraphStatus;
 
 /**
- * This is the Model class for the MVC architecture of FitzFitting
- * View = FFMain, FFLayout.fxml
- * Control = FFController
+ * This is the Model class for the MVC architecture of FitzFitting View =
+ * FFMain, FFLayout.fxml Control = FFController
  * 
- * FFModelSinglet performs a single computational round on the inputted data set,
+ * FFModelSinglet performs a single computational round on the inputted data
+ * set,
  * 
- * without comparison between another data set. This is called when Compare is NOT 
+ * without comparison between another data set. This is called when Compare is
+ * NOT
  * 
  * selected.
  * 
  * @author jkarnuta
  *
  */
-public class FFModelSinglet extends AbstractFFModel{
+public class FFModelSinglet extends AbstractFFModel {
 
-	public FFModelSinglet(String filePath, String denaturantPath ,TextFlow tf ,
-			boolean generateGraphs){
+	public FFModelSinglet(String filePath, String denaturantPath, TextFlow tf,
+			boolean generateGraphs) {
 
 		super(filePath, denaturantPath, tf, generateGraphs);
 	}
+
 	/**
 	 * Only used for Debugging purposes
 	 */
-	public FFModelSinglet(){
+	public FFModelSinglet() {
 	}
 
 	/**
 	 * Writes DataSet.getRuns() to a new file
 	 */
-	public void save(){
+	public void save() {
 		/**
 		 * Make folder for Graphs / Histograms / Analysis / Summary file(s)
 		 */
-		/*Generate the super directory path, which contains all the saved files*/
+		/* Generate the super directory path, which contains all the saved files */
 		super.setSuperPath(generateDirectoryPath(super.SPROX1) + File.separator);
-		new File(getSuperPath()).mkdirs(); //make directory
-		
-		
+		new File(getSuperPath()).mkdirs(); // make directory
+
 		FFModelSave ffsave = new FFModelSave(this);
 
-		//reset progress to use FFModelSave's updateProgress
-		Platform.runLater(()->{
+		// reset progress to use FFModelSave's updateProgress
+		Platform.runLater(() -> {
 			progress.unbind();
 			progress.bind(ffsave.progressProperty());
 		});
 
-		//communicate with GUI
+		// communicate with GUI
 		TextFlowWriter.writeInfo("Saving file...", this.output);
 
-		FFError saveStatus = ffsave.call();
-		if(saveStatus == FFError.NoError){
-			TextFlowWriter.writeSuccess("Successfully saved "+this.savedFilePath, this.output);
-		}
-		else{
-			writeError("Error saving file: "+saveStatus);
+		String saveMessage = ffsave.call();
+		if ("".equals(saveMessage)) {
+			TextFlowWriter.writeSuccess("Successfully saved "
+					+ this.savedFilePath, this.output);
+		} else {
+			writeError("Error saving file: " + saveMessage);
 		}
 	}
-
 
 	/**
 	 * Generates graphs calculated by Dataset.getRuns()
 	 */
-	public void generateGraphs(){
+	public void generateGraphs() {
 
 		final String graphsPath = getSuperPath() + "Graphs";
-		
+
 		/**
 		 * Generate individual run plots
 		 */
-		//Instantiate FFGraphGenerator object
-		FFSingleGraphGenerator ffgg = new FFSingleGraphGenerator(this.data.getChartables1(), this.data.getDenaturants(), graphsPath, this.data.getOffset1() ,this.output);
+		// Instantiate FFGraphGenerator object
+		FFSingleGraphGenerator ffgg = new FFSingleGraphGenerator(
+				this.data.getChartables1(), this.data.getDenaturants(),
+				graphsPath, this.data.getOffset1(), this.output);
 
 		TextFlowWriter.writeInfo("Generating Graphs", this.output);
-		//disable buttons and text fields to wait until graph generation is over
-		Platform.runLater(()->{
+		// disable buttons and text fields to wait until graph generation is
+		// over
+		Platform.runLater(() -> {
 			running.set(true);
 			progress.unbind();
 			progress.bind(ffgg.progressProperty());
@@ -100,51 +102,52 @@ public class FFModelSinglet extends AbstractFFModel{
 
 		ArrayList<GraphStatus> successList = ffgg.call();
 
-		/* Alert User of status of Graph Generation*/
+		/* Alert User of status of Graph Generation */
 		int numberErrors = 0;
-		//Alert if any graph generation failed
-		for (GraphStatus ele : successList){
-			if (ele.getStatus() != FFError.NoError) {
-				TextFlowWriter.writeError("Error Generating Graph #"+ele.getNumber(), this.output);
+		// Alert if any graph generation failed
+		for (GraphStatus ele : successList) {
+			if (!"".equals(ele.getMessage())) {
+				TextFlowWriter.writeError(
+						"Error Generating Graph #" + ele.getNumber(),
+						this.output);
 				numberErrors++;
 			}
 		}
-		//successful alert
-		if(numberErrors == 0)
-			TextFlowWriter.writeSuccess("Successfully generated "+this.data.getRuns1().size() + " graphs", this.output);
-		//alert if any charts are missing
-		else{
+		// successful alert
+		if (numberErrors == 0)
+			TextFlowWriter.writeSuccess("Successfully generated "
+					+ this.data.getRuns1().size() + " graphs", this.output);
+		// alert if any charts are missing
+		else {
 			int numMissing = (this.data.getRuns1().size() - successList.size());
 			String pluralRuns = numMissing == 1 ? "run" : "runs";
-			TextFlowWriter.writeError(numMissing+" "+pluralRuns+" unaccounted for", this.output);
+			TextFlowWriter.writeError(numMissing + " " + pluralRuns
+					+ " unaccounted for", this.output);
 		}
 	}
 
-	//Called as an indication everything is loaded
+	// Called as an indication everything is loaded
 	@Override
 	public void writeLoadedMessage() {
-		//Build skeleton
-		Text message = new Text(
-				"Loaded data into FFModelSinglet.\n"
-						+ "                     SPROX File: "+this.SPROX1 + "\n"
-						+ "              Denaturants File: "+this.denaturantPath + "\n"
-						+ "             Generate Graphs: ");
+		// Build skeleton
+		Text message = new Text("Loaded data into FFModelSinglet.\n"
+				+ "                     SPROX File: " + this.SPROX1 + "\n"
+				+ "              Denaturants File: " + this.denaturantPath
+				+ "\n" + "             Generate Graphs: ");
 
 		message.setFill(TextFlowWriter.FFBlue);
 
-		//Build genGraphs message
+		// Build genGraphs message
 		Text graphsMessage = null;
-		if(generateGraphs){
+		if (generateGraphs) {
 			graphsMessage = new Text("YES");
 			graphsMessage.setFill(TextFlowWriter.FFGreen);
-		}
-		else{
+		} else {
 			graphsMessage = new Text("NO");
 			graphsMessage.setFill(TextFlowWriter.FFRed);
 		}
 
-
-		Text[] texts = new Text[]{message, graphsMessage, new Text("\n")};
+		Text[] texts = new Text[] { message, graphsMessage, new Text("\n") };
 		TextFlowWriter.addArray(texts, this.output);
 	}
 
@@ -153,56 +156,72 @@ public class FFModelSinglet extends AbstractFFModel{
 		// TODO Auto-generated method stub
 		HTMLGenerator hg = new HTMLGenerator(this, null);
 		TextFlowWriter.writeInfo("Generating HTML Summary...", super.output);
-		try{
+		try {
 			hg.call();
-			TextFlowWriter.writeSuccess("Successfully generated HTML Summary", this.output);
-		}catch(Exception e){
+			TextFlowWriter.writeSuccess("Successfully generated HTML Summary",
+					this.output);
+		} catch (Exception e) {
 			e.printStackTrace();
 			TextFlowWriter.writeError(e.getMessage(), super.output);
 		}
 	}
+
 	@Override
 	public void generateHistograms() {
 		/**
 		 * Generate Histograms
 		 */
 		TextFlowWriter.writeInfo("Generating Histograms...", this.output);
-		
-		/*Generate C 1/2 Histogram*/
+
+		/* Generate C 1/2 Histogram */
 		List<Double> cHalfValues = new ArrayList<Double>();
 		List<Double> bValues = new ArrayList<Double>();
 		List<Double> adjustedRSquaredValues = new ArrayList<Double>();
-		for (Chartable chartable: super.data.getChartables1()){
+		for (Chartable chartable : super.data.getChartables1()) {
 			cHalfValues.add(chartable.chalf);
 			bValues.add(chartable.b);
 			adjustedRSquaredValues.add(chartable.adjRSquared);
 		}
 		TextFlowWriter.writeInfo("Calculating C 1/2", this.output);
-		FFHistogramGenerator chalfGenerator = new FFHistogramGenerator(cHalfValues, "Midpoint Histogram",getSuperPath(), -1, false);
-		FFError chalfHistogramError = chalfGenerator.call();
-		
+		FFHistogramGenerator chalfGenerator = new FFHistogramGenerator(
+				cHalfValues, "Midpoint Histogram", getSuperPath(), -1, false);
+		String chalfHistogramError = chalfGenerator.call();
+
 		TextFlowWriter.removeLast(this.output);
 		TextFlowWriter.writeInfo("Calculating b", this.output);
-		FFHistogramGenerator bGenerator = new FFHistogramGenerator(bValues, "b Histogram", getSuperPath(), 
-				FFConstants.InitialBValue, false);
-		FFError bHistogramError = bGenerator.call();
-		
+		FFHistogramGenerator bGenerator = new FFHistogramGenerator(bValues,
+				"b Histogram", getSuperPath(), FFConstants.InitialBValue, false);
+		String bHistogramError = bGenerator.call();
+
 		TextFlowWriter.removeLast(this.output);
 		TextFlowWriter.writeInfo("Calculating Adjusted R Squared", this.output);
-		FFHistogramGenerator adjRGenerator = new FFHistogramGenerator(adjustedRSquaredValues, "Adjusted R Squared Histogram", getSuperPath(),
-				FFConstants.ADJ_R_SQ_HEURISTIC, false);
-		FFError adjRHistogramGerror = adjRGenerator.call();
-		
-		if(chalfHistogramError == FFError.NoError && bHistogramError == FFError.NoError
-				&& adjRHistogramGerror == FFError.NoError){
+		FFHistogramGenerator adjRGenerator = new FFHistogramGenerator(
+				adjustedRSquaredValues, "Adjusted R Squared Histogram",
+				getSuperPath(), FFConstants.ADJ_R_SQ_HEURISTIC, false);
+		String adjRHistogramError = adjRGenerator.call();
+
+		if (areEmpty(chalfHistogramError, bHistogramError, adjRHistogramError)) {
 			TextFlowWriter.removeLast(this.output);
-			TextFlowWriter.writeSuccess("Successfully drew histograms", this.output);
-		}
-		else{
+			TextFlowWriter.writeSuccess("Successfully drew histograms",
+					this.output);
+		} else {
 			TextFlowWriter.removeLast(this.output);
 			TextFlowWriter.writeError("Error drawing histograms", this.output);
 		}
-		
+
+	}
+	/**
+	 * 
+	 * @param errorMessages Strings to see if they are empty
+	 * @return true iff errorMessages contains a non-empty string
+	 */
+	boolean areEmpty(String... errorMessages){
+		for (String s : errorMessages){
+			if (!"".equals(s)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

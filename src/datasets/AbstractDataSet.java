@@ -13,68 +13,75 @@ import javafx.scene.text.TextFlow;
 import containers.*;
 import statics.*;
 
-public abstract class AbstractDataSet extends Task<Void>{
+public abstract class AbstractDataSet extends Task<Void> {
+	
+	public static final int LEADING_IDENTIFIERS = 5; // peptide, prot, exp, intsum, rt
 
 	protected Double[] DenaturantConcentrations;
 	protected final TextFlow output;
-	
+
 	private final File DenaturantFile;
 	private final boolean detectOx;
-	
 
-	//Initialized Variables for run #1
+	// Initialized Variables for run #1
 	protected final File SPROX1File;
 	protected List<String[]> headers1 = new ArrayList<String[]>();
 	protected List<String[]> runs1 = new ArrayList<String[]>();
 	protected List<Chartable> chartables1 = new ArrayList<Chartable>();
-	
+
 	private int offset1; // = number of header lines - 1
 
-	//Declared Variables for run #2
+	// Declared Variables for run #2
 	protected File SPROX2File;
 	protected List<String[]> headers2;
 	protected List<String[]> runs2;
 	protected List<Chartable> chartables2;
+
 	
-	private int offset2;
 
-
-
-	public AbstractDataSet(String SPROXFile, String DenaturantFile,TextFlow output, boolean detectOx){
+	public AbstractDataSet(String SPROXFile, String DenaturantFile,
+			TextFlow output, boolean detectOx) {
 		this.SPROX1File = FFOperations.forceRetrieveFile(SPROXFile);
 		this.DenaturantFile = FFOperations.forceRetrieveFile(DenaturantFile);
 		this.output = output;
 		this.detectOx = detectOx;
 	}
+
 	/**
 	 * ABSTRACT CLASSES FOR IMPLEMENTATION
 	 * 
 	 */
 
-	public abstract FFError load();
+	/*
+	 * @return The error message associated with the loading process. An empty
+	 * string is returned if no error is encountered
+	 */
+	public abstract String load();
 
-	protected abstract Void call() throws Exception; //called from AbstractFFModel.start() -> AbstractDataSet.digest()
+	protected abstract Void call() throws Exception; // called from
+														// AbstractFFModel.start()
+														// ->
+														// AbstractDataSet.digest()
 
-	protected FFError loadDenaturants(){
+	protected String loadDenaturants() {
 
-		//reads and parses denaturants file
-		try (BufferedReader br = new BufferedReader(new FileReader(this.getDenaturantFile()))){
+		// reads and parses denaturants file
+		try (BufferedReader br = new BufferedReader(new FileReader(
+				this.getDenaturantFile()))) {
 			String line = br.readLine();
 			String[] buckets = line.split(",");
 			DenaturantConcentrations = new Double[buckets.length];
 
-			for (int i = 0; i < buckets.length ; i++){
+			for (int i = 0; i < buckets.length; i++) {
 				DenaturantConcentrations[i] = Double.parseDouble(buckets[i]);
 			}
 
 		} catch (IOException e) {
-			TextFlowWriter.writeError(e.getMessage(), this.output);
-			return FFError.ErrorParsingFile;
-		} catch(NumberFormatException e){
-			TextFlowWriter.writeError("NumberFormatException:" +e.getMessage(), this.output);
-			return FFError.InvalidDenaturants;
+			return "IOException: " + e.getMessage();
+		} catch (NumberFormatException e) {
+			return "NumberFormatException: " + e.getMessage();
 		}
-		return FFError.NoError;
+		return "";
 	}
 
 	/**
@@ -82,100 +89,90 @@ public abstract class AbstractDataSet extends Task<Void>{
 	 * Called on FFModel start
 	 */
 
-	public FFError digest(){
+	public String digest() {
 		try {
 			call();
-			return FFError.NoError;
+			return "";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return FFError.CalculationFailure;
+			String message = e.getMessage() + "\nClass: AbstractDataSet";
+			return message;
 		}
 	}
-
 
 	/**
 	 * 
 	 * GETTER / SETTER METHODS
 	 * 
 	 */
-	public boolean getDetectOx(){
+	public boolean getDetectOx() {
 		return this.detectOx;
 	}
 
-	
-	public File getSPROX1File(){
+	public File getSPROX1File() {
 		return this.SPROX1File;
 	}
 
-	public File getDenaturantFile(){
+	public File getDenaturantFile() {
 		return this.DenaturantFile;
 	}
 
-	public Double[] getDenaturants(){
+	public Double[] getDenaturants() {
 		return this.DenaturantConcentrations;
 	}
 
 	/*
-	 * Returns data from first uploaded dataset 
+	 * Returns data from first uploaded dataset
 	 */
-	public List<String[]> getHeaders1(){
+	public List<String[]> getHeaders1() {
 		return headers1;
 	}
 
-	public List<String[]> getRuns1(){
+	public List<String[]> getRuns1() {
 		return runs1;
 	}
 
-	public int getOffset1(){
+	public int getOffset1() {
 		return this.offset1;
 	}
 
-	public void setOffset1(int offset1){
+	public void setOffset1(int offset1) {
 		this.offset1 = offset1;
 	}
 
-	public void addChartable1(Chartable c){
+	public void addChartable1(Chartable c) {
 		this.chartables1.add(c);
 	}
 
-	public List<Chartable> getChartables1(){
+	public List<Chartable> getChartables1() {
 		return this.chartables1;
 	}
 
 	/*
-	 * Returns data from second uploaded data set (returns null if running from Singlet)
+	 * Returns data from second uploaded data set (returns null if running from
+	 * Singlet)
 	 */
 
-	public List<String[]> getHeaders2(){
+	public List<String[]> getHeaders2() {
 		return headers2;
 	}
 
-	public List<String[]> getRuns12(){
+	public List<String[]> getRuns12() {
 		return runs2;
 	}
 
-	public void setOffset2(int offset2){
-		this.offset2 = offset2;
-	}
-
-	public int getOffset2(){
-		return this.offset2;
-	}
-
-	public void addChartable2(Chartable c){
-		try{
+	public void addChartable2(Chartable c) {
+		try {
 			this.chartables2.add(c);
-		}
-		catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			this.chartables2 = new ArrayList<Chartable>();
 			this.chartables2.add(c);
 		}
 	}
 
-	public List<Chartable> getChartables2(){
+	public List<Chartable> getChartables2() {
 		return this.chartables2;
 	}
-
 
 }

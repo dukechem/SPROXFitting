@@ -5,22 +5,22 @@ public class GraphStatus {
 
 	
 	private int runNumber;
-	private FFError status;
+	private String message;
 	
-	public GraphStatus(int number, FFError status){
+	public GraphStatus(int number, String message){
 		this.runNumber = number;
-		this.status = status;
+		this.message =message;
 	}
 	
 	public int getNumber(){
 		return this.runNumber;
 	}
 	
-	public FFError getStatus(){
-		return this.status;
+	public String getMessage(){
+		return message;
 	}
 	
 	public String toString(){
-		return "<GraphStatus>:\nNumber: "+this.runNumber+"\nStatus: "+this.status+"\n";
+		return "<GraphStatus>:\nNumber: "+this.runNumber+"\nMessage: " +this.message;
 	}
 }

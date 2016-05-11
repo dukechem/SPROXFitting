@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.text.TextFlow;
-
-import containers.*;
-import statics.*;
+import statics.FFFileValidator;
+import statics.FFOperations;
+import statics.TextFlowWriter;
+import containers.Chartable;
+import containers.SingleFit;
 
 public class DualSingletDataSet extends AbstractDataSet {
 
@@ -30,7 +32,7 @@ public class DualSingletDataSet extends AbstractDataSet {
 	 * Read / parse Denaturant File (from super)
 	 */
 	@Override
-	public FFError load() {
+	public String load() {
 
 		/*
 		 * SAME AS SingletDataSet
@@ -46,11 +48,10 @@ public class DualSingletDataSet extends AbstractDataSet {
 		}
 
 		if (SPROXValid == -1) {
-			TextFlowWriter.writeError("SPROX File is not a CSV", this.output);
-			return FFError.InvalidFile;
+			String errorMessage = "SPROX File is not a CSV";
+			return errorMessage;
 		}
 		super.setOffset1(SPROXValid);
-		super.setOffset2(SPROXValid);
 
 		/* Tests for Denaturants validity */
 		boolean DenaturantsValid;
@@ -64,9 +65,8 @@ public class DualSingletDataSet extends AbstractDataSet {
 		}
 
 		if (!DenaturantsValid) {
-			TextFlowWriter.writeError("Denaturant File is not a CSV",
-					this.output);
-			return FFError.InvalidFile;
+			String errorMessage = "Denaturant File is not a CSV";
+			return errorMessage;
 		}
 
 		/* Read SPROX file and parse Header */
@@ -84,8 +84,7 @@ public class DualSingletDataSet extends AbstractDataSet {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			TextFlowWriter.writeError(e.getMessage(), this.output);
-			return FFError.ErrorParsingFile;
+			return e.getMessage();
 		}
 
 		return super.loadDenaturants();
@@ -96,7 +95,6 @@ public class DualSingletDataSet extends AbstractDataSet {
 		/* Constants, etc */
 		final int numberSame = 2; // number of headers that are repeats (besides
 									// denaturants)
-		final int offset = 5; // HARDCODING IS BAD BUT I DO IT ANYWAYS
 
 		// parse header
 		// get last header
@@ -109,7 +107,7 @@ public class DualSingletDataSet extends AbstractDataSet {
 			titleList.add(ele);
 		}
 		// insert c 1/2, c 1/2 sd, b, b sd, adj rsq, space after each run
-		final int firstInsert = offset + super.getDenaturants().length;
+		final int firstInsert = LEADING_IDENTIFIERS + super.getDenaturants().length;
 		titleList.addAll(firstInsert, FFOperations.getHeaderAdditions());
 		final int secondInsert = firstInsert + super.getDenaturants().length
 				+ FFOperations.getHeaderAdditions().size() + numberSame;
@@ -154,7 +152,7 @@ public class DualSingletDataSet extends AbstractDataSet {
 			}
 			// build the peptidecontainer for the dualsingletdataset
 			DualSingletPeptideContainer pc = new DualSingletPeptideContainer(
-					super.getRuns1().get(i), denaturants, offset);
+					super.getRuns1().get(i), denaturants, LEADING_IDENTIFIERS);
 			// build the first run from the peptide container
 			DataRun r1 = new DataRun(pc.intensities1, super.getDenaturants(),
 					super.getDetectOx());

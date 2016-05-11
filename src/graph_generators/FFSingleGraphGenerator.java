@@ -174,9 +174,9 @@ public class FFSingleGraphGenerator extends Task<ArrayList<GraphStatus>> {
 				try {
 					File PNGFile = new File(this.dirPath + File.separator+"Image "+currentChartNumber+".png");
 					ChartUtilities.saveChartAsPNG(PNGFile, chart, 500, 400);
-					errorList.add(new GraphStatus(currentChartNumber, FFError.NoError));
+					errorList.add(new GraphStatus(currentChartNumber, ""));
 				} catch (IOException e) {
-					errorList.add(new GraphStatus(currentChartNumber, FFError.GraphGenerationError));
+					errorList.add(new GraphStatus(currentChartNumber, e.getMessage()));
 					e.printStackTrace();
 				} 
 				updateProgress(currentChartNumber,numberIterations);

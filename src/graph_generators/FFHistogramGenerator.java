@@ -5,7 +5,6 @@ import java.awt.Paint;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javafx.concurrent.Task;
@@ -19,9 +18,8 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 
 import statics.FFConstants;
-import containers.FFError;
 
-public class FFHistogramGenerator extends Task<FFError> {
+public class FFHistogramGenerator extends Task<String> {
 
 	private final List<Double> histogramPoints;
 	private final String title;
@@ -40,12 +38,12 @@ public class FFHistogramGenerator extends Task<FFError> {
 	}
 
 	@Override
-	public FFError call(){
+	public String call(){
 		return generate();
 	}
 
 	@SuppressWarnings("serial")
-	private FFError generate(){
+	private String generate(){
 
 		//clean up dataset
 		List<Double> tempDataset = new ArrayList<Double>();
@@ -85,11 +83,11 @@ public class FFHistogramGenerator extends Task<FFError> {
 		try{
 			File PNGFile = new File(this.filepath+File.separator+this.title+".png");
 			ChartUtilities.saveChartAsPNG(PNGFile, chart, 400, 400);
-			return FFError.NoError;
+			return "";
 		}
 		catch(IOException e){
 			e.printStackTrace();
-			return FFError.GraphGenerationError;
+			return e.getMessage();
 		}
 
 	}

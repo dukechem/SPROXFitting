@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Used to validate a SPROX file or a Denaturants File
+ * Utility class to validate a SPROX file or Denaturants File
  * 
  * @author jkarnuta
  *
@@ -17,7 +17,7 @@ public class FFFileValidator {
 	 * For CSV file, return true if ends in .csv
 	 * 
 	 * @param file
-	 * @return
+	 * @return true iff the file ends in ".csv" (quotes for clarity)
 	 */
 	private static boolean validateCSV(File file) {
 		String path = file.getAbsolutePath();
@@ -58,8 +58,8 @@ public class FFFileValidator {
 		boolean validCSV = validateCSV(file);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		br.readLine();
-		boolean isFileOneLine = br.readLine() == null;
+		boolean isOneLine = (br.readLine() == null);
 		br.close();
-		return isFileOneLine && validCSV;
+		return isOneLine && validCSV;
 	}
 }

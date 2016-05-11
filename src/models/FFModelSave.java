@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javafx.concurrent.Task;
-import containers.FFError;
 
 /**
  * Saves the header and ArrayList<String[]> parameters to a new file File is
@@ -15,7 +14,7 @@ import containers.FFError;
  * @author jkarnuta
  *
  */
-public class FFModelSave extends Task<FFError> {
+public class FFModelSave extends Task<String> {
 
 	private final List<String[]> headers;
 	private final List<String[]> runs;
@@ -29,11 +28,11 @@ public class FFModelSave extends Task<FFError> {
 	}
 
 	@Override
-	public FFError call() {
+	public String call() {
 		return save();
 	}
 
-	public FFError save() {
+	public String save() {
 		File newFile = new File(this.directoryPath + APPEND_FILE_NAME);
 		long totalIterations = this.runs.size() - 1; // ignoring header
 		long currentIteration = 0;
@@ -60,11 +59,11 @@ public class FFModelSave extends Task<FFError> {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return FFError.FileSaveError;
+			return e.getMessage();
 
 		}
 
-		return FFError.NoError;
+		return "";
 	}
 
 	/**

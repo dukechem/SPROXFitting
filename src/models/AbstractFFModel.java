@@ -36,7 +36,7 @@ public abstract class AbstractFFModel {
 	public AbstractDataSet data;
 
 	//Communication between DataSet and FFModelSinglet
-	protected FFError status;
+	protected String errorMessage;
 
 	//Communication between FFController and IFFModel 
 	protected SimpleBooleanProperty running; 
@@ -55,6 +55,7 @@ public abstract class AbstractFFModel {
 	{
 		running = new SimpleBooleanProperty(true);
 		progress = new SimpleDoubleProperty();
+		errorMessage = "";
 	}
 	
 	//AbstractFFModel constructor
@@ -101,14 +102,15 @@ public abstract class AbstractFFModel {
 	public void start() {
 		// TODO Auto-generated method stub
 		TextFlowWriter.writeInfo("Analyzing files...", this.output);
-		FFError ffModelExitCode = data.digest();
-		if(ffModelExitCode != FFError.NoError){
-			TextFlowWriter.writeError("Data digest failed => "+ffModelExitCode, this.output);
+		String ffModelExitMessage = data.digest();
+		if(!"".equals(ffModelExitMessage)){
+			TextFlowWriter.writeError("Data digest failed", this.output);
+			TextFlowWriter.writeError(ffModelExitMessage, this.output);
 		}
 		else{
 			TextFlowWriter.writeSuccess("Successfully analyzed files", this.output);
 		}
-		this.status = ffModelExitCode;
+		this.errorMessage = ffModelExitMessage;
 		terminate();
 	}
 
@@ -125,12 +127,14 @@ public abstract class AbstractFFModel {
 		 */
 		progress.bind(this.data.progressProperty());
 
-		this.status =  this.data.load();
-		if (this.status == FFError.NoError){
+		this.errorMessage =  this.data.load();
+		if ("".equals(errorMessage)){
 			TextFlowWriter.writeSuccess("Successfully loaded CSV", this.output);
 		}
 		else{
-			TextFlowWriter.writeError("Error: "+this.status, this.output);
+			TextFlowWriter.writeError("Error", this.output);
+			TextFlowWriter.writeError("Message returned: ",this.output);
+			TextFlowWriter.writeError(this.errorMessage, this.output);
 		}
 	}
 	
@@ -190,8 +194,6 @@ public abstract class AbstractFFModel {
 			running.set(false);
 		});
 	}
-	
-
 
 	/**
 	 * Begin GETTER / SETTER methods
@@ -219,9 +221,9 @@ public abstract class AbstractFFModel {
 	public boolean getGenerateGraphs(){
 		return this.generateGraphs;
 	}
-
-	public FFError getStatus(){
-		return this.status;
+	
+	public String getErrorMessage(){
+			return errorMessage;
 	}
 
 	public void setSuperPath(String path){

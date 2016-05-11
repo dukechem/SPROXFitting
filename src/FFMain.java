@@ -1,5 +1,3 @@
-
-
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -12,15 +10,27 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import containers.*;
 import models.*;
+
+/**
+ * 
+ * @author jkarnuta FitzFitting (known commercially as SPROXFitting), is the
+ *         data analytics platform for SPROX experiments. This software is
+ *         distributed without guarantee and should be used in an academic or
+ *         scientific setting solely for the analysis of Stability of Proteins
+ *         via Rates of OXidation (SPROX) experiments.
+ * 
+ *         The main author, Jaret Karnuta, can be reached via the Fitzgerald
+ *         group at Duke University. Jaret is currently a medical student at the
+ *         Cleveland Clinic Lerner College of Medicine.
+ */
 public class FFMain extends Application {
 
-	/*Constants*/
-	public static final String VERSION = "2.3";
-	
+	/* Constants */
+	public static final String VERSION = "3.0";
 
 	public static Parent root;
 	public static Stage stage;
-	
+
 	private static FFController controller;
 
 	@Override
@@ -31,46 +41,50 @@ public class FFMain extends Application {
 		stage = primaryStage;
 		root = FXMLLoader.load(getClass().getResource("FFLayout.fxml"));
 		Scene scene = new Scene(root);
-		stage.setTitle("FitzFitting SPROX Analysis v"+VERSION);
+		stage.setTitle("FitzFitting SPROX Analysis v" + VERSION);
 		stage.setScene(scene);
 		stage.getIcons().add(new Image("/images/SPROXFitting.png"));
 		stage.setResizable(false);
 		stage.show();
 	}
 
-	public static void loadAndStart(AbstractFFModel model){
+	public static void loadAndStart(AbstractFFModel model) {
 		/*
 		 * Perform preliminary data checks, loads CSVs, and digests
 		 */
-		Thread modelThread = new Thread(){
-			public void run(){
-				//status on loading AbstractDataSet.load() and constructor
-				FFError modelStatus = model.getStatus();
+		Thread modelThread = new Thread() {
+			public void run() {
+				// status on loading AbstractDataSet.load() and constructor
+				String modelErrorMessage = model.getErrorMessage();
 
-				if(modelStatus != FFError.NoError){
-					model.writeError("Error loading model "+modelStatus);
+				if (!"".equals(modelErrorMessage)) {
+					model.writeError("Error calculating model");
+					model.writeError("Message returned:");
+					model.writeError(modelErrorMessage);
+					
 					System.err.println("Terminating");
 					controller.getProgressBar().progressProperty().unbind();
 					model.terminate();
 				}
 
-				//If loaded, write message
+				// If loaded, write message
 				model.writeLoadedMessage();
-				//start digestion (model.start() calls AbstractDataSet.digest())
-				model.start();
-				modelStatus = model.getStatus();
-				if(modelStatus == FFError.NoError){ //Error calculating
+				model.start(); //start model thread
+				modelErrorMessage = model.getErrorMessage(); //initial message
+				if ("".equals(modelErrorMessage)) { // No Error calculating data for model
 					model.save();
-					if(model.getGenerateGraphsStatus()){
+					if (model.getGenerateGraphsStatus()) {
 						model.generateGraphs();
 					}
 					model.generateHTML();
 					model.generateHistograms();
 					model.writeCompleted();
-				}
-				else // on calculation error
+				} else // on calculation error
 				{
-					model.writeError("Error calculating model "+modelStatus);
+					model.writeError("\nError calculating model");
+					model.writeError("Message returned:");
+					model.writeError(modelErrorMessage);
+					controller.getProgressBar().progressProperty().unbind();
 					System.err.println("Terminating");
 				}
 				model.terminate();
@@ -80,18 +94,18 @@ public class FFMain extends Application {
 		modelThread.start();
 	}
 
-	public static void exit(){
+	public static void exit() {
 		Platform.exit();
 		System.exit(0);
 	}
 
-	//set FFController instance to controller
-	public static void setController(FFController controller){
+	// set FFController instance to controller
+	public static void setController(FFController controller) {
 		FFMain.controller = controller;
 	}
 
-	//Backup
-	public static void main(String[] args){
+	// Backup
+	public static void main(String[] args) {
 		launch(args);
 	}
 }

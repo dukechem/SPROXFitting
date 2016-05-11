@@ -17,7 +17,6 @@ import HTML.HTMLGenerator;
 import comparison.FFChartableComparator;
 
 import containers.Chartable;
-import containers.FFError;
 import containers.GraphStatus;
 
 public class FFModelDualSinglet extends AbstractFFModel{
@@ -77,12 +76,12 @@ public class FFModelDualSinglet extends AbstractFFModel{
 		});
 		TextFlowWriter.writeInfo("Saving file...", super.output);
 
-		FFError saveStatus = ffsave.call();
-		if(saveStatus == FFError.NoError){
+		String saveMessage = ffsave.call();
+		if("".equals(saveMessage)){
 			TextFlowWriter.writeSuccess("Successfully saved "+super.savedFilePath, super.output);
 		}
 		else{
-			writeError("Error saving file: "+saveStatus);
+			writeError("Error saving file: "+saveMessage);
 		}
 
 		/**
@@ -151,8 +150,9 @@ public class FFModelDualSinglet extends AbstractFFModel{
 		//check errors
 		int numberErrors = 0;
 		for (GraphStatus ele : successList){
-			if (ele.getStatus() != FFError.NoError) {
+			if (!"".equals(ele.getMessage())) {
 				TextFlowWriter.writeError("Error Generating Graph #"+ele.getNumber(), this.output);
+				TextFlowWriter.writeError("Error for Graph(" + ele.getNumber() + "): " + ele.getMessage(), this.output);
 				numberErrors++;
 			}
 		}
@@ -183,7 +183,7 @@ public class FFModelDualSinglet extends AbstractFFModel{
 		 */
 		TextFlowWriter.writeInfo("Generating Histograms...", this.output);
 
-		List<FFError> histoErrors = new ArrayList<FFError>();
+		List<String> histoErrors = new ArrayList<String>();
 		/*Generate Control Data*/
 		List<Double> cHalfValues = new ArrayList<Double>();
 		List<Double> bValues = new ArrayList<Double>();
@@ -251,8 +251,8 @@ public class FFModelDualSinglet extends AbstractFFModel{
 		
 
 		int numberErrors = 0;
-		for (FFError ffe : histoErrors){
-			if (ffe != FFError.NoError)
+		for (String ffe : histoErrors){
+			if (!"".equals(ffe))
 				numberErrors++;
 		}
 		if(numberErrors == 0){ //success
