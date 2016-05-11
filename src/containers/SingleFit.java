@@ -1,6 +1,7 @@
 package containers;
 
 
+
 public class SingleFit implements Comparable<SingleFit>{
 	public final double[] array;
 	public final double A;

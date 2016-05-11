@@ -136,6 +136,10 @@ public class FFStatistics {
 
 	private double calculateMedian(List<Double> vals) {
 		int size = vals.size();
+		//too small to run statistics on
+		if (size < 2){
+			return 0;
+		}
 		int middle = size / 2;
 		if (size % 2 == 1) {
 			return vals.get(middle);

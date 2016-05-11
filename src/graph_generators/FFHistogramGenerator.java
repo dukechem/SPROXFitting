@@ -5,6 +5,7 @@ import java.awt.Paint;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.concurrent.Task;
@@ -17,8 +18,8 @@ import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 
-import containers.*;
-import statics.*;
+import statics.FFConstants;
+import containers.FFError;
 
 public class FFHistogramGenerator extends Task<FFError> {
 
@@ -61,7 +62,6 @@ public class FFHistogramGenerator extends Task<FFError> {
 		for (int i = 0; i < hists.length; i ++){
 			hists[i] = tempDataset.get(i);
 		}
-		
 		//add dataset to histogram set
 		hd.addSeries("Values", hists, NUMBER_BINS);
 

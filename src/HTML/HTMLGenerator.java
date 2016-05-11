@@ -343,7 +343,7 @@ public class HTMLGenerator extends Task<Void>{
 	}
 
 	private String calculatedHitsRowGenerator(int rowNumber, String peptide, String protein, String alt, boolean graphs){
-		String graphFileLocation = model.getSuperPath()+"Graphs"+File.separator+"Image "+rowNumber+".png";
+		String graphFileLocation = "Graphs"+File.separator+"Image "+rowNumber+".png";
 		String graphsString = (graphs) ? "<td><a class = \"pic\" href = \""+graphFileLocation+"\">Image "+rowNumber+".png</a></td>\n" : "<td>N/A</td>";
 		String s = "<tr "+alt+" >\n"
 				+"<td>"+rowNumber+"</td>\n"
