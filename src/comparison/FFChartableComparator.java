@@ -88,7 +88,6 @@ public class FFChartableComparator extends Task<ComparisonSummary> {
 				FFConstants.DIFFERENCE_HEURISTIC_LOWER, differenceValues);
 		double upperPercentile = FFMath.calculatePercentile(
 				FFConstants.DIFFERENCE_HEURISTIC_UPPER, differenceValues);
-		
 		FFConstants.setUpperBoundPercentile(upperPercentile);
 		FFConstants.setLowerBoundPercentile(lowerPercentile);
 		
@@ -206,6 +205,7 @@ public class FFChartableComparator extends Task<ComparisonSummary> {
 			line.append(",");
 			DifferenceAnalysis diff = new DifferenceAnalysis(c1.intensities,
 					c2.intensities, FFConstants.LOWER_BOUND_PERCENTILE, FFConstants.UPPER_BOUND_PERCENTILE);
+			
 			line.append(FFOperations.doubleArrayToCSV(diff
 					.getPeptideDifferences()));
 			line.append(",");

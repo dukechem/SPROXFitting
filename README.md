@@ -22,3 +22,4 @@ version  | release information
 2.2  | Fixed bug with peptide difference analysis that prevented some peptides from being identified as  significant    
 2.3  | Updated GUI labels  
 2.4  | Changed image paths to relative instead of absolute. 
+2.5  | Fixed single experiment fitting bug and added unique temporal identifier to each generated file

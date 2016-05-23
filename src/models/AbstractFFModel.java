@@ -1,6 +1,4 @@
 package models;
-import containers.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
@@ -10,10 +8,12 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.text.TextFlow;
+import statics.FFOperations;
+import statics.TextFlowWriter;
 
-import comparison.*;
-import statics.*;
-import datasets.*;
+import comparison.ComparisonSummary;
+
+import datasets.AbstractDataSet;
 
 
 public abstract class AbstractFFModel {
@@ -154,21 +154,19 @@ public abstract class AbstractFFModel {
 		String[] pathArray = path.split(File.separator);
 		String filename = pathArray[pathArray.length-1];
 		String[] splittedFileName = filename.split("\\.");
-		pathArray[pathArray.length-1] = splittedFileName[0]+"_FITTED_"+getDate();
+		pathArray[pathArray.length-1] = splittedFileName[0]+"_FITTED_"+getDateTime();
 		return join(pathArray, File.separator);
 	}
 	
 	/**
-	 * retreives the current date in dd-mmm-yyyy format
+	 * retreives the current date and time in dd-mmm-yyyy-HH.mm.ss format
 	 * @return
 	 */
-	private String getDate(){
+	private String getDateTime(){
 		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
+		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-YYYY-HH.mm.ss");
 		return format.format(cal.getTime());
 	}
-
-
 
 	/**
 	 * mimics "sep".join(array) from python

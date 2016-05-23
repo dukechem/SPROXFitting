@@ -10,13 +10,13 @@ import containers.HitContainer;
 import containers.CSVStringBuilder;
 import statics.FFOperations;
 
-public class HitSave extends Task<Boolean>{
+public class HitListSave extends Task<Boolean>{
 
 	private final AbstractFFModel model;
 	private static final String SAVE_FILENAME = "Hit List.csv";
 	private static final String CSV_ROW_NUMBER_HEADER = "Peptide #,";
 	
-	public HitSave(AbstractFFModel model){
+	public HitListSave(AbstractFFModel model){
 		this.model = model;
 	}
 

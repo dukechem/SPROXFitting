@@ -111,7 +111,7 @@ public class FFModelDualSinglet extends AbstractFFModel{
 		 * We also want to save a new file that contains the intensities of ONLY the hit peptides
 		 */
 		
-		HitSave hs = new HitSave(this);
+		HitListSave hs = new HitListSave(this);
 		TextFlowWriter.writeInfo("Saving Hits...", super.output);
 		Platform.runLater(()->{
 			super.progress.unbind();

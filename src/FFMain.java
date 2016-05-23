@@ -13,7 +13,7 @@ import models.*;
 
 /**
  * 
- * @author jkarnuta FitzFitting (known commercially as SPROXFitting), is the
+ * @author jkarnuta FitzFitting (known academically as SPROXFitting), is the
  *         data analytics platform for SPROX experiments. This software is
  *         distributed without guarantee and should be used in an academic or
  *         scientific setting solely for the analysis of Stability of Proteins
@@ -26,7 +26,7 @@ import models.*;
 public class FFMain extends Application {
 
 	/* Constants */
-	public static final String VERSION = "3.0";
+	public static final String VERSION = "2.5";
 
 	public static Parent root;
 	public static Stage stage;

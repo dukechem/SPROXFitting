@@ -1,5 +1,7 @@
 package difference_analysis;
 
+import java.util.Arrays;
+
 import statics.FFConstants;
 
 public class DifferenceAnalysis {
@@ -46,7 +48,8 @@ public class DifferenceAnalysis {
 			if ((difference > lower && difference < upper)) {
 				sig = 0;
 			} else {
-				// If it is above upper bound, assign 1, else -1 (already checked if between bounds
+				// If it is above upper bound, assign 1, else -1 (already
+				// checked if between bounds
 				sig = (difference >= upper) ? 1 : -1;
 			}
 			// assign to comps
@@ -55,7 +58,7 @@ public class DifferenceAnalysis {
 		if (!FFConstants.RUN_PEPTIDE_ANALYSIS)
 			return true; // bypass peptide differences
 		/*
-		 * iterate through sigs to find two 1 or two -1 together. CANNOT HAVE
+		 * iterate through comps to find two 1 or two -1 together. CANNOT HAVE
 		 * BOTH
 		 */
 		int numberPosNext = 0;
@@ -74,7 +77,7 @@ public class DifferenceAnalysis {
 			return false;
 		boolean pos = numberPosNext != 0;
 		boolean neg = numberNegNext != 0;
-		return pos ^ neg;
+		return pos ^ neg; //can't have both be true
 	}
 
 	public boolean getPassed() {
@@ -86,15 +89,10 @@ public class DifferenceAnalysis {
 	}
 
 	public static void main(String[] args) {
-		double[] d1 = new double[] { 1.44923, 2.64822, 1.79728, 0.788501,
-				0.635343, 0.532062, 0.465364, 0.383963 };
-		double[] d2 = new double[] { 1.62644, 2.98272, 1.7875, 0.853763,
-				0.497392, 0.527146, 0.406604, 0.425795 };
-		DifferenceAnalysis diff = new DifferenceAnalysis(d1, d2, -.1, .1);
-		/*
-		 * comps = [-1, -1, 0, 0, 1, 0, 0, 0] numberPosNext = 0 numberNegNext =
-		 * 1 passed = true getPeptideDifference = [-0.17721, -0.3345, 0.00978,
-		 * -0.065262, 0.137951, 0.004916, 0.05876, -0.041832]
-		 */
+		double[] d1 = new double[] {1.6639,	1.36218,	1.0055,	1.31179,	1.10563,	0.628371,	0.664786,	0.37346};
+		double[] d2 = new double[] {1.40081,	1.53168,	1.03814,	0.783611,	0.842433,	1.12881,	0.760567,	0.664373};
+		DifferenceAnalysis diff = new DifferenceAnalysis(d1, d2, -0.093881408, 0.096997);
+		System.out.println(diff.getPassed());
+		System.out.println(Arrays.toString(diff.getPeptideDifferences()));
 	}
 }
