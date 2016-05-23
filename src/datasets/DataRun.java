@@ -191,6 +191,8 @@ public class DataRun extends Task<SingleFit>{
 			A = FFMath.min(intensities2);
 			B = FFMath.max(intensities2);
 		}
+		
+		//IF YOU WANT TO HARDCODE VALUES, DO SO BELOW
 		ret[0] = A;
 		ret[1] = B;
 		return ret;
