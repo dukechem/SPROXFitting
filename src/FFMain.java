@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import statics.TextFlowWriter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -7,9 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import containers.*;
-import models.*;
+import models.AbstractFFModel;
 
 /**
  * 
@@ -26,7 +28,7 @@ import models.*;
 public class FFMain extends Application {
 
 	/* Constants */
-	public static final String VERSION = "2.5";
+	public static final String VERSION = "2.6";
 
 	public static Parent root;
 	public static Stage stage;
@@ -41,7 +43,7 @@ public class FFMain extends Application {
 		stage = primaryStage;
 		root = FXMLLoader.load(getClass().getResource("FFLayout.fxml"));
 		Scene scene = new Scene(root);
-		stage.setTitle("FitzFitting SPROX Analysis v" + VERSION);
+		stage.setTitle("SproxFitting SPROX Analysis v" + VERSION);
 		stage.setScene(scene);
 		stage.getIcons().add(new Image("/images/SPROXFitting.png"));
 		stage.setResizable(false);
@@ -49,11 +51,14 @@ public class FFMain extends Application {
 	}
 
 	public static void loadAndStart(AbstractFFModel model) {
+		//beginning time of execution
+		long startTime = System.currentTimeMillis();
 		/*
 		 * Perform preliminary data checks, loads CSVs, and digests
 		 */
 		Thread modelThread = new Thread() {
 			public void run() {
+				
 				// status on loading AbstractDataSet.load() and constructor
 				String modelErrorMessage = model.getErrorMessage();
 
@@ -87,6 +92,25 @@ public class FFMain extends Application {
 					controller.getProgressBar().progressProperty().unbind();
 					System.err.println("Terminating");
 				}
+				//display execution time
+				long endTime = System.currentTimeMillis();
+				double deltaTimeSecs = (endTime - startTime) / 1000.0;
+				
+				Text message = new Text("Model terminated in: ");
+				message.setFill(TextFlowWriter.FFBlue);
+				
+				Text time = new Text(""+deltaTimeSecs);
+				time.setFill(TextFlowWriter.FFBlue);
+				Font boldedFont = Font.font("expressway.ttf", FontWeight.BOLD, 12);
+				time.setFont(boldedFont);
+				
+				Text timeUnits = new Text("s" + "\n");
+				timeUnits.setFill(TextFlowWriter.FFBlue);
+				
+				//write time message to output
+				model.writeText(message);
+				model.writeText(time);
+				model.writeText(timeUnits);
 				model.terminate();
 			}
 		};

@@ -2,8 +2,6 @@ package containers;
 
 
 public class HitContainer {
-
-	
 	public int CSVLineNumber;
 	public String peptide;
 	public String protein;

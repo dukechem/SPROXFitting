@@ -7,12 +7,13 @@ import java.util.Calendar;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import statics.FFOperations;
 import statics.TextFlowWriter;
-
 import comparison.ComparisonSummary;
-
 import datasets.AbstractDataSet;
 
 
@@ -51,11 +52,15 @@ public abstract class AbstractFFModel {
 	//used for comparisons and hits
 	ComparisonSummary compSummary = null;
 	
+	//used for timing model execution
+	private final long startTime;
+	
 	//class initializer
 	{
 		running = new SimpleBooleanProperty(true);
 		progress = new SimpleDoubleProperty();
 		errorMessage = "";
+		startTime = System.currentTimeMillis();
 	}
 	
 	//AbstractFFModel constructor
@@ -186,7 +191,7 @@ public abstract class AbstractFFModel {
 	}
 	
 
-	public void terminate() {
+	public void terminate() {		
 		//Send to FFController
 		Platform.runLater(()->{
 			running.set(false);
@@ -248,5 +253,13 @@ public abstract class AbstractFFModel {
 	}
 	public void writeCompleted(){
 		TextFlowWriter.writeSuccess("Successfully completed data analysis", this.output);
+	}
+	
+	public void writeInfo(String text){
+		TextFlowWriter.writeInfo(text, this.output);
+	}
+	
+	public void writeText(Text text){
+		TextFlowWriter.addText(text, this.output);
 	}
 }

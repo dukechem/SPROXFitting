@@ -47,7 +47,7 @@ public class FFController implements Initializable {
 
 	@FXML
 	private TextField SPROXField, SPROX2Field, DenaturantField, MidPointValue,
-			AdjustedRSquaredValue, DifferenceValueLower, DifferenceValueUpper;
+			AdjustedRSquaredValue, DifferenceValueLower, DifferenceValueUpper, AValue, BValue;
 
 	@FXML
 	private Menu MidpointCriteria, AdjustedRSquaredCriteria,
@@ -55,7 +55,7 @@ public class FFController implements Initializable {
 
 	@FXML
 	private CheckBox Graphs, dualExperiment, detectOxCheckBox,
-			runPeptideAnalysis;
+			runPeptideAnalysis, calcualteAAndB;
 
 	@FXML
 	private Group SPROXGroup, SPROX2Group;
@@ -78,22 +78,6 @@ public class FFController implements Initializable {
 	private boolean detectOx = false; // psuedo bound to detectOxCheckBox
 	private boolean generateGraphs = false;
 
-	/*
-	 * initial values displayed on check boxes
-	 */
-
-	private final String detectOxInitialMessage = "Detect Ox Met?";
-	private final boolean detectOxInitialCondition = false;
-
-	private final String dualExperimentInitialMessage = "-/+ Ligand Experiment?";
-	private final boolean dualExperimentInitialCondition = true;
-
-	private final String generateGraphsInitialMessage = "Generate Graphs?";
-	private final boolean generateGraphsInitialCondition = false;
-
-	private final String runPeptideAnalysisInitialMessage = "Run Difference Analysis?";
-	private final boolean runPeptideAnalysisInitialCondition = true;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		FFMain.setController(this);
@@ -108,30 +92,22 @@ public class FFController implements Initializable {
 		 */
 
 		Graphs.setAllowIndeterminate(false);
-		Graphs.setSelected(generateGraphsInitialCondition);
-		Graphs.textProperty().set(generateGraphsInitialMessage);
 
 		/*
 		 * Set indeterminate on detectOxCheckBox to false Bind changes in
 		 * detectOxCheckBox to detectOx
 		 */
 		detectOxCheckBox.setAllowIndeterminate(false);
-		detectOxCheckBox.setSelected(detectOxInitialCondition);
-		detectOxCheckBox.textProperty().set(detectOxInitialMessage);
 
 		/*
 		 * setup dual experiment check box
 		 */
 		dualExperiment.setAllowIndeterminate(false);
-		dualExperiment.setSelected(dualExperimentInitialCondition);
-		dualExperiment.textProperty().set(dualExperimentInitialMessage);
 
 		/*
 		 * set up peptide difference analysis check box
 		 */
 		runPeptideAnalysis.setAllowIndeterminate(false);
-		runPeptideAnalysis.setSelected(runPeptideAnalysisInitialCondition);
-		runPeptideAnalysis.textProperty().set(runPeptideAnalysisInitialMessage);
 		
 		/*
 		 * add listeners to the peptide analysis text fields

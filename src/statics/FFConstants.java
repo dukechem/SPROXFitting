@@ -3,18 +3,31 @@ package statics;
 
 public class FFConstants {
 
-	/*For FFGraphGenerator*/
+	/*Initial estimates for regression*/
 	public static final double InitialCHalfValue = 1.0d;
 	public static final double InitialBValue = 0.3d;
 	
-	/*For FFChartableComparator*/
-	public static double ADJ_R_SQ_HEURISTIC = 0.7d;
-	public static double MIDPOINT_HEURISTIC = 0.5d;
-	public static double DIFFERENCE_HEURISTIC_LOWER = 15;
-	public static double LOWER_BOUND_PERCENTILE = Double.MIN_VALUE;
-	public static double DIFFERENCE_HEURISTIC_UPPER = 85;
-	public static double UPPER_BOUND_PERCENTILE = Double.MAX_VALUE;
-	public static boolean RUN_PEPTIDE_ANALYSIS = true;
+	
+	/*For Histogram generator && FFStatistics*/
+	//upper bound cutoff for histogram domain
+	public static final double CLEAN_UPPER_BOUND = 10d;
+	//lower bound cutoff for hisogram domain
+	public static final double CLEAN_LOWER_BOUND = -10d;
+	
+	/*For FFChartableLogic and HTMLGenerator*/
+	public static final String COMPARISON_FILENAME = "Comparison.csv";
+	public static final String COMPARISON_HEADER_ADDITIONS = "A, B, C 1/2, C 1/2 SD, b, bSD, Adjusted R Squared,";
+	
+	/*For fitting logic*/
+	public static double ADJ_R_SQ_HEURISTIC = 0.7d; //cutoff
+	public static double MIDPOINT_HEURISTIC = 0.5d; //cutoff
+	public static double DIFFERENCE_HEURISTIC_LOWER = 15; //%ile cutoff
+	public static double LOWER_BOUND_PERCENTILE = Double.MIN_VALUE; //not calculated yet
+	public static double DIFFERENCE_HEURISTIC_UPPER = 85; //%ile cutoff
+	public static double UPPER_BOUND_PERCENTILE = Double.MAX_VALUE; //not calcualted yet
+	public static boolean RUN_PEPTIDE_ANALYSIS = true; //default to running difference analysis
+	public static double USER_DEFINED_A_VALUE = -1; //not inputted yet
+	public static double USER_DEFINED_B_VALUE = -1; //not inputted yet
 	
 	/*Set above heuristics*/
 	public static void setAdjustedRSquaredHeuristic(String set){
@@ -50,12 +63,5 @@ public class FFConstants {
 	public static void setLowerBoundPercentile(double percentile){
 		LOWER_BOUND_PERCENTILE = percentile;
 	}
-	
-	/*For Histogram generator && FFStatistics*/
-	public static final double CLEAN_UPPER_BOUND = 10d;
-	public static final double CLEAN_LOWER_BOUND = -10d;
-	
-	/*For FFChartableComparator and HTMLGenerator*/
-	public static final String COMPARISON_FILENAME = "Comparison.csv";
 }
 

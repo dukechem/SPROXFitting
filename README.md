@@ -23,3 +23,4 @@ version  | release information
 2.3  | Updated GUI labels  
 2.4  | Changed image paths to relative instead of absolute. 
 2.5  | Fixed single experiment fitting bug and added unique temporal identifier to each generated file
+2.6  | Reports calculated A and B assignments in all output methods

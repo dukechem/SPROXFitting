@@ -26,6 +26,20 @@
                         </MenuItem>
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Transition Values">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="A value (pre-transition)">
+                           <graphic>
+                              <TextField fx:id="AValue" />
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" text="B value (post-transition)">
+                           <graphic>
+                              <TextField fx:id="BValue" />
+                           </graphic>
+                        </MenuItem>
+                    </items>
+                  </Menu>
                   <Menu mnemonicParsing="false" text="Adjusted R Squared Criteria">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Adjusted R Squared Cutoff">
@@ -75,25 +89,26 @@
       <ProgressBar id="progressBar" fx:id="progressBar" layoutX="1.0" layoutY="456.0" prefHeight="20.0" prefWidth="594.0" progress="0.0" />
       <VBox layoutX="9.0" layoutY="98.0">
          <children>
-            <Label text="Model Options" />
-            <ToolBar layoutX="3.0" layoutY="96.0" prefHeight="30.0" prefWidth="497.0">
-               <items>
-                  <CheckBox id="Dual" fx:id="dualExperiment" layoutX="160.0" layoutY="100.0" mnemonicParsing="false" />
-                  <CheckBox id="GenerateGraphs" fx:id="Graphs" layoutX="330.0" layoutY="100.0" mnemonicParsing="false" />
-               </items>
-            </ToolBar>
+            <Label text="Program Options" />
+            <HBox>
+               <children>
+                  <CheckBox id="GenerateGraphs" fx:id="Graphs" layoutX="330.0" layoutY="100.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="130.0" text="Generate Graphs?" />
+                  <CheckBox id="Dual" fx:id="dualExperiment" layoutX="160.0" layoutY="100.0" mnemonicParsing="false" prefWidth="170.0" selected="true" text="-/+ Ligand Experiment?" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <Button id="button-default" fx:id="AnalyzeButton" defaultButton="true" layoutX="512.0" layoutY="131.0" mnemonicParsing="false" onAction="#AnalyzeOnAction" prefHeight="27.0" prefWidth="80.0" styleClass="Button-Default" text="Analyze" />
       <VBox layoutX="9.0" layoutY="156.0">
          <children>
-            <Label layoutX="9.0" layoutY="150.0" text="Peptide Options" />
-            <ToolBar layoutX="14.0" layoutY="165.0">
-               <items>
-                  <CheckBox fx:id="detectOxCheckBox" mnemonicParsing="false" />
-                  <CheckBox fx:id="runPeptideAnalysis" layoutX="14.0" layoutY="165.0" mnemonicParsing="false" />
-               </items>
-            </ToolBar>
+            <Label layoutX="9.0" layoutY="150.0" text="Fitting Options" />
+            <HBox>
+               <children>
+                  <CheckBox fx:id="detectOxCheckBox" mnemonicParsing="false" prefHeight="18.0" prefWidth="130.0" text="Detect Ox Met?" />
+                  <CheckBox fx:id="runPeptideAnalysis" layoutX="14.0" layoutY="165.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="170.0" selected="true" text="Run Difference Analysis?" />
+                  <CheckBox fx:id="calcualteAAndB" mnemonicParsing="false" selected="true" text="Calculate A and B?" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

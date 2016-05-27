@@ -3,12 +3,12 @@ package containers;
 
 
 public class SingleFit implements Comparable<SingleFit>{
-	public final double[] array;
+	public final double[] fittedParameters;
 	public final double A;
 	public final double B;
 	public final int removedValue;
 	public SingleFit(double[] arr, int removedValue, double A, double B){
-		this.array = arr;
+		this.fittedParameters = arr;
 		this.removedValue = removedValue;
 		this.A=A;
 		this.B=B;
@@ -16,8 +16,8 @@ public class SingleFit implements Comparable<SingleFit>{
 	
 	@Override
 	public int compareTo(SingleFit o) {
-		double thisRsq = this.array[4];
-		double thatRsq = o.array[4];
+		double thisRsq = this.fittedParameters[4];
+		double thatRsq = o.fittedParameters[4];
 
 		boolean lg = thisRsq < thatRsq;
 		boolean eq = thisRsq == thatRsq;
@@ -28,7 +28,7 @@ public class SingleFit implements Comparable<SingleFit>{
 	public String toString(){
 		String s = "";
 		s += ("#Removed: "+removedValue+"\n");
-		s += ("adjRsq: "+array[4]+"\n");
+		s += ("adjRsq: "+fittedParameters[4]+"\n");
 		return s;
 	}
 }

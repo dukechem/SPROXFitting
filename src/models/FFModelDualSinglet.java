@@ -14,7 +14,7 @@ import statics.FFConstants;
 import statics.TextFlowWriter;
 import HTML.HTMLGenerator;
 
-import comparison.FFChartableComparator;
+import comparison.FFChartableLogic;
 
 import containers.Chartable;
 import containers.GraphStatus;
@@ -90,7 +90,7 @@ public class FFModelDualSinglet extends AbstractFFModel{
 
 		TextFlowWriter.writeInfo("Calculating Analysis File", this.output);
 
-		FFChartableComparator ffcc = new FFChartableComparator(super.data.getChartables1(), super.data.getChartables2(),
+		FFChartableLogic ffcc = new FFChartableLogic(super.data.getChartables1(), super.data.getChartables2(),
 				super.data.getHeaders1(), super.getSuperPath(), super.output);
 
 		Platform.runLater(()->{

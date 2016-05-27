@@ -32,9 +32,6 @@ public abstract class AbstractDataSet extends Task<Void> {
 	private int offset1; // = number of header lines - 1
 
 	// Declared Variables for run #2
-	protected File SPROX2File;
-	protected List<String[]> headers2;
-	protected List<String[]> runs2;
 	protected List<Chartable> chartables2;
 
 	
@@ -153,15 +150,6 @@ public abstract class AbstractDataSet extends Task<Void> {
 	 * Returns data from second uploaded data set (returns null if running from
 	 * Singlet)
 	 */
-
-	public List<String[]> getHeaders2() {
-		return headers2;
-	}
-
-	public List<String[]> getRuns12() {
-		return runs2;
-	}
-
 	public void addChartable2(Chartable c) {
 		try {
 			this.chartables2.add(c);

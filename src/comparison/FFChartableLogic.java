@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javafx.concurrent.Task;
@@ -16,15 +15,21 @@ import statics.TextFlowWriter;
 import containers.Chartable;
 import containers.HitContainer;
 import difference_analysis.DifferenceAnalysis;
-
-public class FFChartableComparator extends Task<ComparisonSummary> {
+/**
+ * Main class for handling Chartable comparing logic. Only called from FFModelDualSinglet
+ * @author jkarnuta
+ *
+ */
+public class FFChartableLogic extends Task<ComparisonSummary> {
 
 	private final List<Chartable> charts1;
 	private final List<Chartable> charts2;
 	private final List<String[]> headers;
 	private final String directoryPath;
-	private static final String APPEND_FILE_NAME = FFConstants.COMPARISON_FILENAME;
 	private final TextFlow output;
+	private final String APPEND_FILE_NAME = FFConstants.COMPARISON_FILENAME;
+	//header additions for comparisons.csv (or FFCosntants.COMPARISON_FILENAME);
+	private final String HEADER_ADDITIONS = FFConstants.COMPARISON_HEADER_ADDITIONS;
 
 	private int numberCompared;
 	private boolean allCompared;
@@ -35,7 +40,7 @@ public class FFChartableComparator extends Task<ComparisonSummary> {
 
 	private int currentLineNumber = 0;
 
-	public FFChartableComparator(List<Chartable> charts1,
+	public FFChartableLogic(List<Chartable> charts1,
 			List<Chartable> charts2, List<String[]> headers,
 			String directoryPath, TextFlow output) {
 		this.charts1 = charts1;
@@ -106,7 +111,7 @@ public class FFChartableComparator extends Task<ComparisonSummary> {
 
 			// generalized header for experiments
 			StringBuilder expHeader = new StringBuilder();
-			expHeader.append("C 1/2, C 1/2 SD, b, bSD, Adjusted R Squared,");
+			expHeader.append(HEADER_ADDITIONS);
 
 			// generalized headers for peptide analysis
 			StringBuilder peptideDiffHeader = new StringBuilder("tag #");
@@ -177,6 +182,10 @@ public class FFChartableComparator extends Task<ComparisonSummary> {
 
 			// build control
 			line.append(","); // add empty cell between blocks
+			line.append(c1.A);
+			line.append(",");
+			line.append(c1.B);
+			line.append(",");
 			line.append(c1.chalf);
 			line.append(",");
 			line.append(c1.chalfSD);
@@ -190,6 +199,10 @@ public class FFChartableComparator extends Task<ComparisonSummary> {
 
 			// build ligand
 			line.append(","); // add empty cell between blocks
+			line.append(c2.A);
+			line.append(",");
+			line.append(c2.B);
+			line.append(",");
 			line.append(c2.chalf);
 			line.append(",");
 			line.append(c2.chalfSD);

@@ -41,6 +41,8 @@ public class FFOperations {
 	public static List<String> getHeaderAdditions(){
 		@SuppressWarnings("serial")
 		ArrayList<String> returnList = new ArrayList<String>(){{
+			add("A");
+			add("B");
 			add("C 1/2");
 			add("C 1/2 SD");
 			add("b");

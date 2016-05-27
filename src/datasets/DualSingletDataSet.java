@@ -18,7 +18,6 @@ public class DualSingletDataSet extends AbstractDataSet {
 	public DualSingletDataSet(String SPROXFile, String DenaturantFile,
 			TextFlow output, boolean detectOx) {
 		super(SPROXFile, DenaturantFile, output, detectOx);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -236,27 +235,35 @@ public class DualSingletDataSet extends AbstractDataSet {
 			@SuppressWarnings("serial")
 			List<String> list = new ArrayList<String>() {
 				{
+					//add independent identifiers
 					add(peptide);
 					add(accessionNumber);
 					add(experiment);
+					//add first experiment (control) values
 					add(String.valueOf(isolationInterference1));
 					add(String.valueOf(rt1));
 					for (double ele : intensities1) {
 						add(String.valueOf(ele));
 					}
-					for (double ele : calculatedValues1.array) {
+					add(""+calculatedValues1.A);
+					add(""+calculatedValues1.B);
+					for (double ele : calculatedValues1.fittedParameters) {
 						add(String.valueOf(ele));
 					}
 					add(EOF_STRING);
+					//add second experiment (+ ligand) values
 					add(String.valueOf(isolationInterference2));
 					add(String.valueOf(rt2));
 					for (double ele : intensities2) {
 						add(String.valueOf(ele));
 					}
-					for (double ele : calculatedValues2.array) {
+					add(""+calculatedValues2.A);
+					add(""+calculatedValues2.B);
+					for (double ele : calculatedValues2.fittedParameters) {
 						add(String.valueOf(ele));
 					}
 					add(EOF_STRING);
+					//add additional data that was contained beyond experimental values 
 					for (String ele : theRest) {
 						add(ele);
 					}
@@ -271,7 +278,7 @@ public class DualSingletDataSet extends AbstractDataSet {
 		}
 
 		public Chartable toChartable1() {
-			final double[] calculatedArray1 = this.calculatedValues1.array;
+			final double[] calculatedArray1 = this.calculatedValues1.fittedParameters;
 			final double chalf = calculatedArray1[0];
 			final double chalfSD = calculatedArray1[1];
 			final double b = calculatedArray1[2];
@@ -285,7 +292,7 @@ public class DualSingletDataSet extends AbstractDataSet {
 		}
 
 		public Chartable toChartable2() {
-			final double[] calculatedArray2 = this.calculatedValues2.array;
+			final double[] calculatedArray2 = this.calculatedValues2.fittedParameters;
 			final double chalf = calculatedArray2[0];
 			final double chalfSD = calculatedArray2[1];
 			final double b = calculatedArray2[2];
