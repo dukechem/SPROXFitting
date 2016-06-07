@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" stylesheets="@FFSkins.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FFController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" stylesheets="@FFSkins.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FFController">
    <children>
       <MenuBar prefHeight="30.0" prefWidth="600.0">
         <menus>
@@ -30,12 +39,12 @@
                     <items>
                       <MenuItem mnemonicParsing="false" text="A value (pre-transition)">
                            <graphic>
-                              <TextField fx:id="AValue" />
+                              <TextField fx:id="AValue" promptText="Pre-transition value" />
                            </graphic>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" text="B value (post-transition)">
                            <graphic>
-                              <TextField fx:id="BValue" />
+                              <TextField fx:id="BValue" promptText="Post-transition value" />
                            </graphic>
                         </MenuItem>
                     </items>
@@ -106,7 +115,7 @@
                <children>
                   <CheckBox fx:id="detectOxCheckBox" mnemonicParsing="false" prefHeight="18.0" prefWidth="130.0" text="Detect Ox Met?" />
                   <CheckBox fx:id="runPeptideAnalysis" layoutX="14.0" layoutY="165.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="170.0" selected="true" text="Run Difference Analysis?" />
-                  <CheckBox fx:id="calcualteAAndB" mnemonicParsing="false" selected="true" text="Calculate A and B?" />
+                  <CheckBox fx:id="calculateAAndB" mnemonicParsing="false" selected="true" text="Calculate A and B?" />
                </children>
             </HBox>
          </children>

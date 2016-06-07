@@ -26,6 +26,7 @@ public class FFConstants {
 	public static double DIFFERENCE_HEURISTIC_UPPER = 85; //%ile cutoff
 	public static double UPPER_BOUND_PERCENTILE = Double.MAX_VALUE; //not calcualted yet
 	public static boolean RUN_PEPTIDE_ANALYSIS = true; //default to running difference analysis
+	public static boolean CALCULATE_A_B = true;
 	public static double USER_DEFINED_A_VALUE = -1; //not inputted yet
 	public static double USER_DEFINED_B_VALUE = -1; //not inputted yet
 	
@@ -62,6 +63,16 @@ public class FFConstants {
 	}
 	public static void setLowerBoundPercentile(double percentile){
 		LOWER_BOUND_PERCENTILE = percentile;
+	}
+	
+	public static void setCalculateAB(boolean bool){
+		CALCULATE_A_B = bool;
+	}
+	public static void setAValue(Double value){
+		USER_DEFINED_A_VALUE = value;
+	}
+	public static void setBValue(Double value){
+		USER_DEFINED_B_VALUE = value;
 	}
 }
 

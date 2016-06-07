@@ -185,9 +185,12 @@ public class DataRun extends Task<SingleFit> {
 			// average of first half intensities > average of second half
 			// intensities. Accounts for the fact that we could have odd
 			// intensities
-			nonOx = firstHalfValuesSum / (intensities2.length / 2) >= secondHalfValuesSum
-					/ (intensities2.length - (intensities2.length / 2));
+			nonOx = (firstHalfValuesSum / (intensities2.length / 2)) >= (secondHalfValuesSum / (intensities2.length - (intensities2.length / 2)));
 		}
+		
+		/*
+		 * Using user defined A and B values instead for at least A or B
+		 */
 
 		if (nonOx) {
 			A = FFMath.max(intensities2);
@@ -197,7 +200,20 @@ public class DataRun extends Task<SingleFit> {
 			B = FFMath.max(intensities2);
 		}
 
-		// IF YOU WANT TO HARDCODE VALUES, DO SO BELOW
+		//set to placeholder value in FFConstants
+		//longer than necessary because A or B might still want to be calcualted automatically
+		double userDefinedA = -1;
+		double userDefinedB = -1;
+		if(!FFConstants.CALCULATE_A_B){
+			userDefinedA = FFConstants.USER_DEFINED_A_VALUE;
+			userDefinedB = FFConstants.USER_DEFINED_B_VALUE;
+			if (userDefinedA > 0){
+				A = userDefinedA;
+			}
+			if (userDefinedB > 0){
+				B = userDefinedB;
+			}
+		} 
 		ret[0] = A;
 		ret[1] = B;
 		return ret;

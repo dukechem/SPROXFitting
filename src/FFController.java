@@ -36,7 +36,7 @@ import datasets.SingletDataSet;
 
 public class FFController implements Initializable {
 
-	private static final boolean DEBUG = false;
+	public static final boolean DEBUG = false;
 
 	/*
 	 * Injectible fields for FXML
@@ -47,7 +47,8 @@ public class FFController implements Initializable {
 
 	@FXML
 	private TextField SPROXField, SPROX2Field, DenaturantField, MidPointValue,
-			AdjustedRSquaredValue, DifferenceValueLower, DifferenceValueUpper, AValue, BValue;
+			AdjustedRSquaredValue, DifferenceValueLower, DifferenceValueUpper,
+			AValue, BValue;
 
 	@FXML
 	private Menu MidpointCriteria, AdjustedRSquaredCriteria,
@@ -55,7 +56,7 @@ public class FFController implements Initializable {
 
 	@FXML
 	private CheckBox Graphs, dualExperiment, detectOxCheckBox,
-			runPeptideAnalysis, calcualteAAndB;
+			runPeptideAnalysis, calculateAAndB;
 
 	@FXML
 	private Group SPROXGroup, SPROX2Group;
@@ -108,21 +109,27 @@ public class FFController implements Initializable {
 		 * set up peptide difference analysis check box
 		 */
 		runPeptideAnalysis.setAllowIndeterminate(false);
-		
+
 		/*
 		 * add listeners to the peptide analysis text fields
 		 */
 		DifferenceValueLower.setText(String
 				.valueOf(FFConstants.DIFFERENCE_HEURISTIC_LOWER));
 		DifferenceValueLower.textProperty().addListener(
-				new BoundDoubleTextFieldChangeListener(0, 100,
-						DifferenceValueLower));
+				new PercentileDoubleChangeListener(DifferenceValueLower));
 
 		DifferenceValueUpper.setText(String
 				.valueOf(FFConstants.DIFFERENCE_HEURISTIC_UPPER));
 		DifferenceValueUpper.textProperty().addListener(
-				new BoundDoubleTextFieldChangeListener(0, 100,
-						DifferenceValueUpper));
+				new PercentileDoubleChangeListener(DifferenceValueUpper));
+
+		/*
+		 * add listeners to the transition parameters text fields
+		 */
+		AValue.textProperty().addListener(
+				new TransitionDoubleChangeListener(AValue));
+		BValue.textProperty().addListener(
+				new TransitionDoubleChangeListener(BValue));
 
 		/*
 		 * Force FFInfo to scroll down on each append
@@ -312,6 +319,18 @@ public class FFController implements Initializable {
 		FFConstants.setDifferenceHeuristic(DifferenceValueLower.getText(),
 				DifferenceValueUpper.getText());
 		FFConstants.setRunPeptideAnalysis(runPeptideAnalysis.isSelected());
+		FFConstants.setCalculateAB(calculateAAndB.isSelected());
+		//must set at least of {AValue, BValue}
+		if(!FFConstants.CALCULATE_A_B){
+			//if AValue is entered, set
+			if (!"".equals(AValue.getText())){
+				FFConstants.setAValue(Double.parseDouble(AValue.getText().trim()));
+			}
+			//if BValue is entered, set
+			if (!"".equals(BValue.getText())){
+				FFConstants.setBValue(Double.parseDouble(BValue.getText().trim()));
+			}
+		}
 
 		AbstractFFModel model;
 		AbstractDataSet dataset;
@@ -364,19 +383,46 @@ public class FFController implements Initializable {
 		return generateGraphs;
 	}
 
+	/**
+	 * Provides validation to ensure that only proper values (between 0 and 100)
+	 * are allowed
+	 * 
+	 * @author jkarnuta
+	 *
+	 */
+	private class PercentileDoubleChangeListener extends
+			BoundDoubleTextFieldChangeListener {
+		private static final String percentileErrorMessage = "Percentiles must be between 0 and 100";
+
+		public PercentileDoubleChangeListener(TextField tf) {
+			super(0, 100, tf, percentileErrorMessage);
+		}
+	}
+
+	private class TransitionDoubleChangeListener extends
+			BoundDoubleTextFieldChangeListener {
+		private static final String transitionErrorMessage = "Transition value must be > 0";
+
+		public TransitionDoubleChangeListener(TextField tf) {
+			super(Double.MIN_NORMAL, Double.MAX_VALUE, tf,
+					transitionErrorMessage);
+		}
+	}
+
 	private class BoundDoubleTextFieldChangeListener implements
 			ChangeListener<String> {
 
 		private final double lowerBound;
 		private final double upperBound;
-		private final String errorMessage = "Percentiles must be between 0 and 100";
+		private final String errorMessage;
 		private final TextField tf;
 
 		// add upper and lower bound
 		public BoundDoubleTextFieldChangeListener(double lower, double upper,
-				TextField tf) {
+				TextField tf, String errorMessage) {
 			lowerBound = lower;
 			upperBound = upper;
+			this.errorMessage = errorMessage;
 			this.tf = tf;
 		}
 
