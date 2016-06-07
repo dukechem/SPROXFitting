@@ -115,7 +115,7 @@
                <children>
                   <CheckBox fx:id="detectOxCheckBox" mnemonicParsing="false" prefHeight="18.0" prefWidth="130.0" text="Detect Ox Met?" />
                   <CheckBox fx:id="runPeptideAnalysis" layoutX="14.0" layoutY="165.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="170.0" selected="true" text="Run Difference Analysis?" />
-                  <CheckBox fx:id="calculateAAndB" mnemonicParsing="false" selected="true" text="Calculate A and B?" />
+                  <CheckBox fx:id="calculateAAndB" mnemonicParsing="false" selected="true" text="Auto Calculate A and B?" />
                </children>
             </HBox>
          </children>

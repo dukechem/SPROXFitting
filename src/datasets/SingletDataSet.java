@@ -150,14 +150,14 @@ public class SingletDataSet extends AbstractDataSet {
 					}
 					pc.parseCalculatedValues(calculatedFit);
 					// append calculatedRun to data, add a space at end
-					String[] newRun = new String[calculatedFit.array.length
+					String[] newRun = new String[calculatedFit.fittedParameters.length
 							+ run.length + 1];
 					for (int j = 0; j < run.length; j++) {
 						newRun[j] = run[j];
 					}
-					for (int j = run.length; j < calculatedFit.array.length
+					for (int j = run.length; j < calculatedFit.fittedParameters.length
 							+ run.length; j++) {
-						newRun[j] = String.valueOf(calculatedFit.array[j
+						newRun[j] = String.valueOf(calculatedFit.fittedParameters[j
 								- run.length]);
 					}
 					newRun[newRun.length - 1] = "";
@@ -224,7 +224,7 @@ public class SingletDataSet extends AbstractDataSet {
 			/*
 			 * Will always present chalf, chalf sd, b, b sd, adjrsq
 			 */
-			double[] arr = sf.array;
+			double[] arr = sf.fittedParameters;
 			this.chalf = arr[0];
 			this.chalfSD = arr[1];
 			this.b = arr[2];

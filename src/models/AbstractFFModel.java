@@ -52,15 +52,11 @@ public abstract class AbstractFFModel {
 	//used for comparisons and hits
 	ComparisonSummary compSummary = null;
 	
-	//used for timing model execution
-	private final long startTime;
-	
 	//class initializer
 	{
 		running = new SimpleBooleanProperty(true);
 		progress = new SimpleDoubleProperty();
 		errorMessage = "";
-		startTime = System.currentTimeMillis();
 	}
 	
 	//AbstractFFModel constructor
