@@ -1,7 +1,11 @@
 # SPROXFitting
 Javafx front end and backend rewrite of SPROX parameters (only transitions)
 
+## Requirements ##
 
+flanagan.jar https://www.ee.ucl.ac.uk/~mflanaga/java/
+
+jfreechart.jar  http://www.jfree.org/jfreechart/download.html
 
 
 
